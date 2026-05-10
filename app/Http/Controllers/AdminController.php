@@ -7,6 +7,7 @@ use App\Models\Report;
 use App\Models\ReportLog;
 use App\Models\Technician;
 use App\Models\Building;
+use App\Models\Room;
 use App\Models\User;
 use App\Notifications\ReportNotification;
 
@@ -176,6 +177,69 @@ class AdminController extends Controller
         return view('admin.users', compact('users'));
     }
 
+    public function storeUser(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8',
+            'role' => 'required|in:admin,user,technician',
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+            'role' => $request->role,
+        ]);
+
+        // If role is technician, we should ideally create a Technician record too, 
+        // but the user might want to fill those details separately in Technicians page.
+        // However, for consistency with AdminController@storeTechnician, let's auto-create basic tech record.
+        if ($user->role === 'technician') {
+            \App\Models\Technician::create([
+                'user_id' => $user->id,
+                'name' => $user->name,
+                'status' => 'offline',
+            ]);
+        }
+
+        return back()->with('success', 'Pengguna berhasil ditambahkan.');
+    }
+
+    public function updateUser(Request $request, User $user)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'role' => 'required|in:admin,user,technician',
+            'password' => 'nullable|string|min:8',
+        ]);
+
+        $data = $request->only(['name', 'email', 'role']);
+        if ($request->filled('password')) {
+            $data['password'] = \Illuminate\Support\Facades\Hash::make($request->password);
+        }
+
+        $user->update($data);
+
+        return back()->with('success', 'Pengguna berhasil diperbarui.');
+    }
+
+    public function deleteUser(User $user)
+    {
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'Anda tidak bisa menghapus akun Anda sendiri.');
+        }
+
+        if ($user->reports()->count() > 0) {
+            return back()->with('error', 'Pengguna tidak bisa dihapus karena memiliki riwayat laporan.');
+        }
+
+        $user->delete();
+        return back()->with('success', 'Pengguna berhasil dihapus.');
+    }
+
     public function technicians()
     {
         $technicians = Technician::withCount('reports')->get();
@@ -227,5 +291,75 @@ class AdminController extends Controller
     {
         $buildings = Building::with('rooms')->get();
         return view('admin.settings', compact('buildings'));
+    }
+
+    // Building Management
+    public function storeBuilding(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'code' => 'required|string|max:10|unique:buildings,code',
+        ]);
+
+        Building::create($request->all());
+        return back()->with('success', 'Gedung berhasil ditambahkan.');
+    }
+
+    public function updateBuilding(Request $request, Building $building)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'code' => 'required|string|max:10|unique:buildings,code,' . $building->id,
+        ]);
+
+        $building->update($request->all());
+        return back()->with('success', 'Gedung berhasil diperbarui.');
+    }
+
+    public function deleteBuilding(Building $building)
+    {
+        // Optional: Check if building has reports or rooms
+        if ($building->rooms()->count() > 0) {
+            return back()->with('error', 'Gedung tidak bisa dihapus karena masih memiliki ruangan.');
+        }
+
+        $building->delete();
+        return back()->with('success', 'Gedung berhasil dihapus.');
+    }
+
+    // Room Management
+    public function storeRoom(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'building_id' => 'required|exists:buildings,id',
+            'floor' => 'nullable|string|max:10',
+        ]);
+
+        Room::create($request->all());
+        return back()->with('success', 'Ruangan berhasil ditambahkan.');
+    }
+
+    public function updateRoom(Request $request, Room $room)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'building_id' => 'required|exists:buildings,id',
+            'floor' => 'nullable|string|max:10',
+        ]);
+
+        $room->update($request->all());
+        return back()->with('success', 'Ruangan berhasil diperbarui.');
+    }
+
+    public function deleteRoom(Room $room)
+    {
+        // Optional: Check if room has reports
+        if ($room->reports()->count() > 0) {
+            return back()->with('error', 'Ruangan tidak bisa dihapus karena memiliki riwayat laporan.');
+        }
+
+        $room->delete();
+        return back()->with('success', 'Ruangan berhasil dihapus.');
     }
 }

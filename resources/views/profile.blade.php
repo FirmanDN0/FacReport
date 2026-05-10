@@ -1,7 +1,10 @@
-@extends('layouts.app')
+@extends(auth()->user()->isAdmin() ? 'layouts.admin' : (auth()->user()->isTechnician() ? 'layouts.technician' : 'layouts.app'))
+
 @section('title', 'Profil Saya - FacReport')
+@section('page-title', 'Profil Saya')
+
 @section('content')
-<div class="page-header">
+<div class="page-header" style="{{ !auth()->user()->isAdmin() && !auth()->user()->isTechnician() ? '' : 'display:none' }}">
     <div class="subtitle">Pengaturan Akun</div>
     <h1>Profil Saya</h1>
     <p>Kelola informasi pribadi dan keamanan akun Anda.</p>
@@ -12,25 +15,15 @@
     <div>
         <div class="form-card" style="text-align:center">
             <div class="nav-user" style="justify-content:center; margin-bottom:20px">
-                <div class="avatar" style="width:80px; height:80px; font-size:32px">{{ $user->initial }}</div>
+                <div class="avatar" style="width:80px; height:80px; font-size:32px">{{ auth()->user()->initial }}</div>
             </div>
-            <h2 style="font-size:20px; font-weight:700; margin-bottom:4px">{{ $user->name }}</h2>
-            <p style="color:var(--gray-500); font-size:14px; margin-bottom:20px">{{ $user->email }}</p>
+            <h2 style="font-size:20px; font-weight:700; margin-bottom:4px">{{ auth()->user()->name }}</h2>
+            <p style="color:var(--gray-500); font-size:14px; margin-bottom:20px">{{ auth()->user()->email }}</p>
             
             <div style="display:flex; flex-direction:column; gap:10px">
-                <span class="status status-{{ $user->role == 'admin' ? 'success' : ($user->role == 'technician' ? 'warning' : 'info') }}" style="padding:6px 12px; border-radius:20px; font-size:12px; font-weight:600">
-                    Role: {{ ucfirst($user->role) }}
+                <span class="status status-{{ auth()->user()->role == 'admin' ? 'success' : (auth()->user()->role == 'technician' ? 'warning' : 'info') }}" style="padding:6px 12px; border-radius:20px; font-size:12px; font-weight:600">
+                    Role: {{ ucfirst(auth()->user()->role) }}
                 </span>
-                
-                @if($user->isAdmin())
-                    <a href="{{ route('admin.dashboard') }}" class="btn btn-outline" style="justify-content:center">
-                        <i class="fas fa-chart-line"></i> Dashboard Admin
-                    </a>
-                @elseif($user->isTechnician())
-                    <a href="{{ route('technician.dashboard') }}" class="btn btn-outline" style="justify-content:center">
-                        <i class="fas fa-tasks"></i> Dashboard Teknisi
-                    </a>
-                @endif
             </div>
         </div>
     </div>

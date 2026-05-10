@@ -9,7 +9,13 @@
         <span class="id-badge">ID: #{{ $report->report_code }} · Dilaporkan {{ $report->created_at->format('d F Y') }}</span>
     </div>
     <div class="detail-status">
-        <span class="status-badge status-{{ $report->status }}">{{ strtoupper($report->status == 'diproses' ? '<i class="fas fa-tools"></i> DALAM PERBAIKAN' : $report->status_label) }}</span>
+        <span class="status-badge status-{{ $report->status }}">
+            @if($report->status == 'diproses')
+                <i class="fas fa-tools"></i> DALAM PERBAIKAN
+            @else
+                {{ strtoupper($report->status_label) }}
+            @endif
+        </span>
         <div class="update-date">Update terakhir: {{ $report->updated_at->format('d F Y') }}</div>
     </div>
 </div>

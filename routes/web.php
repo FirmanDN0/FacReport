@@ -43,11 +43,22 @@ Route::middleware('auth')->group(function () {
         Route::get('/reports', [AdminController::class, 'reports'])->name('reports');
         Route::get('/reports/{report}', [AdminController::class, 'showReport'])->name('reports.show');
         Route::put('/reports/{report}', [AdminController::class, 'updateReport'])->name('reports.update');
+        // Users
         Route::get('/users', [AdminController::class, 'users'])->name('users');
+        Route::post('/users', [AdminController::class, 'storeUser'])->name('users.store');
+        Route::put('/users/{user}', [AdminController::class, 'updateUser'])->name('users.update');
+        Route::delete('/users/{user}', [AdminController::class, 'deleteUser'])->name('users.delete');
         Route::get('/technicians', [AdminController::class, 'technicians'])->name('technicians');
         Route::post('/technicians', [AdminController::class, 'storeTechnician'])->name('technicians.store');
         Route::put('/technicians/{technician}', [AdminController::class, 'updateTechnician'])->name('technicians.update');
+        // Settings (Buildings & Rooms)
         Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
+        Route::post('/settings/buildings', [AdminController::class, 'storeBuilding'])->name('buildings.store');
+        Route::put('/settings/buildings/{building}', [AdminController::class, 'updateBuilding'])->name('buildings.update');
+        Route::delete('/settings/buildings/{building}', [AdminController::class, 'deleteBuilding'])->name('buildings.delete');
+        Route::post('/settings/rooms', [AdminController::class, 'storeRoom'])->name('rooms.store');
+        Route::put('/settings/rooms/{room}', [AdminController::class, 'updateRoom'])->name('rooms.update');
+        Route::delete('/settings/rooms/{room}', [AdminController::class, 'deleteRoom'])->name('rooms.delete');
     });
 
     // Technician routes
