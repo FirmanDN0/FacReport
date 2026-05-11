@@ -50,21 +50,23 @@
                 <a href="{{ route('admin.dashboard', ['status'=>'selesai']) }}" class="{{ request('status')=='selesai' ? 'active' : '' }}">Selesai</a>
             </div>
         </div>
-        <table class="data-table">
-            <thead><tr><th>ID</th><th>Fasilitas</th><th>Gedung</th><th>Tingkat</th><th>Status</th><th>Tanggal</th></tr></thead>
-            <tbody>
-            @foreach($reports->take(6) as $r)
-            <tr style="cursor:pointer" onclick="location.href='{{ route('admin.reports.show', $r) }}'">
-                <td>#{{ $r->report_code }}</td>
-                <td>{{ $r->facility_name }} — {{ $r->room->name }}</td>
-                <td>{{ $r->building->name }}</td>
-                <td><span class="status severity-{{ $r->severity }}" style="padding:2px 10px;border-radius:10px;font-size:12px">{{ $r->severity_label }}</span></td>
-                <td><span class="status status-{{ $r->status }}" style="padding:2px 10px;border-radius:10px;font-size:12px">{{ $r->status_label }}</span></td>
-                <td>{{ $r->created_at->format('d M Y') }}</td>
-            </tr>
-            @endforeach
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead><tr><th>ID</th><th>Fasilitas</th><th>Gedung</th><th>Tingkat</th><th>Status</th><th>Tanggal</th></tr></thead>
+                <tbody>
+                @foreach($reports->take(6) as $r)
+                <tr style="cursor:pointer" onclick="location.href='{{ route('admin.reports.show', $r) }}'">
+                    <td>#{{ $r->report_code }}</td>
+                    <td>{{ $r->facility_name }} — {{ $r->room->name }}</td>
+                    <td>{{ $r->building->name }}</td>
+                    <td><span class="status severity-{{ $r->severity }}" style="padding:2px 10px;border-radius:10px;font-size:12px">{{ $r->severity_label }}</span></td>
+                    <td><span class="status status-{{ $r->status }}" style="padding:2px 10px;border-radius:10px;font-size:12px">{{ $r->status_label }}</span></td>
+                    <td>{{ $r->created_at->format('d M Y') }}</td>
+                </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div>

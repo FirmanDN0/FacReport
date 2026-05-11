@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
     <div class="admin-layout">
         <aside class="sidebar">
             <div class="logo-section">
@@ -39,7 +40,10 @@
         </aside>
         <main class="admin-content">
             <div class="admin-topbar">
-                <div>
+                <div style="display: flex; align-items: center;">
+                    <button class="mobile-menu-btn admin-mobile-btn lg:hidden" id="sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
                     <h2>@yield('page-title', 'Dashboard') <span class="date">— {{ now()->translatedFormat('l, j F Y') }}</span></h2>
                 </div>
                 <div class="search">
@@ -62,5 +66,18 @@
             </div>
         </main>
     </div>
+    <script>
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        const toggle = document.getElementById('sidebar-toggle');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        toggle?.addEventListener('click', toggleSidebar);
+        overlay?.addEventListener('click', toggleSidebar);
+    </script>
 </body>
 </html>

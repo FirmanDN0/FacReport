@@ -36,47 +36,49 @@
     <div class="section-tabs">
         <a href="#" class="active">Daftar Laporan yang Ditugaskan</a>
     </div>
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Fasilitas</th>
-                <th>Lokasi</th>
-                <th>Tingkat</th>
-                <th>Status</th>
-                <th>Tanggal</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($reports as $r)
-            <tr>
-                <td>#{{ $r->report_code }}</td>
-                <td>{{ $r->facility_name }}</td>
-                <td>{{ $r->building->name }} — {{ $r->room->name }}</td>
-                <td>
-                    <span class="status severity-{{ $r->severity }}" style="padding:2px 10px;border-radius:10px;font-size:12px">
-                        {{ $r->severity_label }}
-                    </span>
-                </td>
-                <td>
-                    <span class="status status-{{ $r->status }}" style="padding:2px 10px;border-radius:10px;font-size:12px">
-                        {{ $r->status_label }}
-                    </span>
-                </td>
-                <td>{{ $r->created_at->format('d M Y') }}</td>
-                <td>
-                    <a href="{{ route('technician.reports.show', $r) }}" class="btn btn-sm btn-primary">Detail</a>
-                </td>
-            </tr>
-            @endforeach
-            @if($reports->isEmpty())
-            <tr>
-                <td colspan="7" style="text-align:center;padding:40px;color:var(--gray-400)">Belum ada tugas yang diberikan.</td>
-            </tr>
-            @endif
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fasilitas</th>
+                    <th>Lokasi</th>
+                    <th>Tingkat</th>
+                    <th>Status</th>
+                    <th>Tanggal</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($reports as $r)
+                <tr>
+                    <td>#{{ $r->report_code }}</td>
+                    <td>{{ $r->facility_name }}</td>
+                    <td>{{ $r->building->name }} — {{ $r->room->name }}</td>
+                    <td>
+                        <span class="status severity-{{ $r->severity }}" style="padding:2px 10px;border-radius:10px;font-size:12px">
+                            {{ $r->severity_label }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="status status-{{ $r->status }}" style="padding:2px 10px;border-radius:10px;font-size:12px">
+                            {{ $r->status_label }}
+                        </span>
+                    </td>
+                    <td>{{ $r->created_at->format('d M Y') }}</td>
+                    <td>
+                        <a href="{{ route('technician.reports.show', $r) }}" class="btn btn-sm btn-primary">Detail</a>
+                    </td>
+                </tr>
+                @endforeach
+                @if($reports->isEmpty())
+                <tr>
+                    <td colspan="7" style="text-align:center;padding:40px;color:var(--gray-400)">Belum ada tugas yang diberikan.</td>
+                </tr>
+                @endif
+            </tbody>
+        </table>
+    </div>
     <div style="padding:20px">
         {{ $reports->links() }}
     </div>

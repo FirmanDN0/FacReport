@@ -11,7 +11,12 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="{{ route('dashboard') }}" class="logo">FacReport</a>
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button class="mobile-menu-btn lg:hidden" id="mobile-nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="{{ route('dashboard') }}" class="logo">FacReport</a>
+        </div>
         <div class="nav-links">
             <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">Beranda</a>
             <a href="{{ route('reports.create') }}" class="{{ request()->routeIs('reports.create') ? 'active' : '' }}">Form Lapor</a>
@@ -72,5 +77,10 @@
         @endif
         @yield('content')
     </div>
+    <script>
+        document.getElementById('mobile-nav-toggle')?.addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
 </body>
 </html>

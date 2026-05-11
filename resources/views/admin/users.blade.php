@@ -11,6 +11,7 @@
 </div>
 
 <div class="data-section">
+<div class="table-responsive">
     <table class="data-table">
         <thead>
             <tr>
@@ -54,6 +55,7 @@
         @endforeach
         </tbody>
     </table>
+</div>
 </div>
 
 <div class="pagination-wrapper" style="margin-top: 20px">

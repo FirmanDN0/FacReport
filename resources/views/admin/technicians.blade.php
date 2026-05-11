@@ -5,36 +5,38 @@
     <h3>Daftar Teknisi</h3>
 </div>
 
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+<div class="charts-grid">
     <div class="data-section">
-        <table class="data-table">
-            <thead><tr><th>Nama</th><th>Spesialisasi</th><th>Status</th><th>Tugas</th><th>Aksi</th></tr></thead>
-            <tbody>
-            @foreach($technicians as $t)
-            <tr>
-                <td style="font-weight:600">{{ $t->name }}</td>
-                <td>{{ $t->specialization }}</td>
-                <td>
-                    <span style="display:inline-flex;align-items:center;gap:4px">
-                        <span style="width:6px;height:6px;border-radius:50%;background:{{ $t->status=='aktif'?'var(--success)':($t->status=='sibuk'?'var(--warning)':'var(--gray-400)') }}"></span>
-                        {{ ucfirst($t->status) }}
-                    </span>
-                </td>
-                <td>{{ $t->reports_count }}</td>
-                <td>
-                    <form method="POST" action="{{ route('admin.technicians.update', $t) }}" style="display:inline">
-                        @csrf @method('PUT')
-                        <select name="status" onchange="this.form.submit()" style="padding:4px 8px;border:1px solid var(--gray-200);border-radius:6px;font-size:12px">
-                            <option value="aktif" {{ $t->status=='aktif'?'selected':'' }}>Aktif</option>
-                            <option value="sibuk" {{ $t->status=='sibuk'?'selected':'' }}>Sibuk</option>
-                            <option value="offline" {{ $t->status=='offline'?'selected':'' }}>Offline</option>
-                        </select>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead><tr><th>Nama</th><th>Spesialisasi</th><th>Status</th><th>Tugas</th><th>Aksi</th></tr></thead>
+                <tbody>
+                @foreach($technicians as $t)
+                <tr>
+                    <td style="font-weight:600">{{ $t->name }}</td>
+                    <td>{{ $t->specialization }}</td>
+                    <td>
+                        <span style="display:inline-flex;align-items:center;gap:4px">
+                            <span style="width:6px;height:6px;border-radius:50%;background:{{ $t->status=='aktif'?'var(--success)':($t->status=='sibuk'?'var(--warning)':'var(--gray-400)') }}"></span>
+                            {{ ucfirst($t->status) }}
+                        </span>
+                    </td>
+                    <td>{{ $t->reports_count }}</td>
+                    <td>
+                        <form method="POST" action="{{ route('admin.technicians.update', $t) }}" style="display:inline">
+                            @csrf @method('PUT')
+                            <select name="status" onchange="this.form.submit()" style="padding:4px 8px;border:1px solid var(--gray-200);border-radius:6px;font-size:12px">
+                                <option value="aktif" {{ $t->status=='aktif'?'selected':'' }}>Aktif</option>
+                                <option value="sibuk" {{ $t->status=='sibuk'?'selected':'' }}>Sibuk</option>
+                                <option value="offline" {{ $t->status=='offline'?'selected':'' }}>Offline</option>
+                            </select>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div class="form-card">

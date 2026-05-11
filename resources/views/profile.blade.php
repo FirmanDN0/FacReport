@@ -10,7 +10,7 @@
     <p>Kelola informasi pribadi dan keamanan akun Anda.</p>
 </div>
 
-<div class="detail-grid" style="grid-template-columns: 1fr 1.5fr;">
+<div class="detail-grid">
     <!-- Profile Card -->
     <div>
         <div class="form-card" style="text-align:center">

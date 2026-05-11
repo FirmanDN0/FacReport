@@ -21,23 +21,25 @@
             <input type="text" name="search" placeholder="Cari laporan..." value="{{ request('search') }}">
         </form>
     </div>
-    <table class="data-table">
-        <thead><tr><th>ID</th><th>Fasilitas</th><th>Pelapor</th><th>Gedung</th><th>Tingkat</th><th>Status</th><th>Tanggal</th><th></th></tr></thead>
-        <tbody>
-        @foreach($reports as $r)
-        <tr>
-            <td>#{{ $r->report_code }}</td>
-            <td>{{ $r->facility_name }}</td>
-            <td>{{ $r->user->name }}</td>
-            <td>{{ $r->building->name }}</td>
-            <td><span class="status severity-{{ $r->severity }}" style="padding:2px 10px;border-radius:10px;font-size:12px">{{ $r->severity_label }}</span></td>
-            <td><span class="status status-{{ $r->status }}" style="padding:2px 10px;border-radius:10px;font-size:12px">{{ $r->status_label }}</span></td>
-            <td>{{ $r->created_at->format('d M Y') }}</td>
-            <td><a href="{{ route('admin.reports.show', $r) }}" style="color:var(--primary);font-size:13px;font-weight:500">Detail →</a></td>
-        </tr>
-        @endforeach
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="data-table">
+            <thead><tr><th>ID</th><th>Fasilitas</th><th>Pelapor</th><th>Gedung</th><th>Tingkat</th><th>Status</th><th>Tanggal</th><th></th></tr></thead>
+            <tbody>
+            @foreach($reports as $r)
+            <tr>
+                <td>#{{ $r->report_code }}</td>
+                <td>{{ $r->facility_name }}</td>
+                <td>{{ $r->user->name }}</td>
+                <td>{{ $r->building->name }}</td>
+                <td><span class="status severity-{{ $r->severity }}" style="padding:2px 10px;border-radius:10px;font-size:12px">{{ $r->severity_label }}</span></td>
+                <td><span class="status status-{{ $r->status }}" style="padding:2px 10px;border-radius:10px;font-size:12px">{{ $r->status_label }}</span></td>
+                <td>{{ $r->created_at->format('d M Y') }}</td>
+                <td><a href="{{ route('admin.reports.show', $r) }}" style="color:var(--primary);font-size:13px;font-weight:500">Detail →</a></td>
+            </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
 </div>
 <div class="pagination-wrapper">{{ $reports->withQueryString()->links() }}</div>
 @endsection
